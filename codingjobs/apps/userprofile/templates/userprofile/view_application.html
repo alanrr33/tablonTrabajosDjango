@@ -1,0 +1,40 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h1 class="title">Ver aplicaciones</h1>
+    <h2 class="subtitle">{{ application.job.title }}</h2>
+    <small>Agregado el:  {{ application.created_at }} </small>
+
+    <p><strong> Contenido:  </strong> {{ application.content }} </p>
+    <p><strong> Experiencia:  </strong> {{ application.experience }} </p>
+
+    <hr>
+
+    <h2 class="subtitle">Conversación</h2>
+        {% for message in application.conversationmessages.all  %}
+            <div class="notification">
+                <b> {{ message.created_by.username }} - hace {{ message.created_at|timesince }} </b>
+                {{ message.content }}
+            </div>
+        {% empty %}
+            <p> No hay mensajes todavía </p>
+            <hr>
+        {% endfor %}
+        <form method="POST" action=".">
+            {% csrf_token %}
+            <div class="field">
+                <div class="control">
+                <textarea class="textarea" placeholder="Tu mensaje" name="content" id="id_contents"></textarea>
+                </div>
+            </div>
+
+            <div class="field">
+                <div class="control">
+                <button class="button is-success">Enviar</button>
+                </div>
+            </div>
+
+        </form>
+
+
+{% endblock %}

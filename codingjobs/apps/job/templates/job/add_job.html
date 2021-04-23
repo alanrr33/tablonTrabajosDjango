@@ -1,0 +1,160 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+<div id="add-job-app">
+    <h1 class="title">Agregar trabajo</h1>
+
+    <form method="post" action="." v-on:submit.prevent="validateForm()">
+        {% csrf_token %}
+
+        {% if form.erros %}
+            {% for error in form.errors %}
+                <div class="notification is-danger">
+                    {{ error }}
+                </div>
+            {% endfor %}
+        {% endif %}
+
+        <div class="notification is-danger" v-if="errors.length">
+            <p v-for="error in errors">    
+                [[ error ]]
+            </p>
+        </div>
+
+        <div class="field">
+            <label>Titulo</label>
+            <div class="control">
+                <input class="input" type="text" name="title" id="id_title" v-model="title">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Descripcion corta</label>
+            <div class="control">
+                <textarea class="textarea" name="short_description" id="id_short_description" v-model="short_description"></textarea>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Descripcion larga</label>
+            <div class="control">
+                <textarea class="textarea" name="long_description" id="id_long_description"></textarea>
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Nombre compañia</label>
+            <div class="control">
+                <input class="input" type="text" name="company_name" id="id_company_name" v-model="company_name">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Dirección compañia</label>
+            <div class="control">
+                <input class="input" type="text" name="company_address" id="id_company_address">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Codigo postal compañía</label>
+            <div class="control">
+                <input class="input" type="text" name="company_zip_code" id="id_company_zip_code">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Nombre compañia</label>
+            <div class="control">
+                <input class="input" type="text" name="company_name" id="id_company_name">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Lugar compañia</label>
+            <div class="control">
+                <input class="input" type="text" name="company_place" id="id_company_place">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>País compañia</label>
+            <div class="control">
+                <input class="input" type="text" name="company_country" id="id_company_country">
+            </div>
+        </div>
+
+        <div class="field">
+            <label>Tamaño compañia</label>
+            <div class="control">
+                <div class="select">
+                    <select name="company_size" v-model="company_size">
+                    <option value="">Elegi tamaño</option>
+                    <option value="size_1-9">1-9</option>
+                    <option value="size_10-49">10-49</option>
+                    <option value="size_50-99">50-99</option>
+                    <option value="size_100">100+</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+
+
+        <div class="field">
+            <div class="control">
+                <button class="button is-success">Enviar </button>
+            </div>
+        </div>
+    </form>
+</div>    
+{% endblock content %}
+
+{% block scripts %}
+    <script>
+        const AddJobApp ={
+            data() {
+                return {
+                    title: '',
+                    company_name: '',
+                    short_description: '',
+                    company_size: '',
+                    errors: [],
+                }
+            },
+            delimiters: ['[[',']]'],
+            methods: {
+                validateForm(e){
+                    this.errors=[]
+
+                    if (this.title === ''){
+                        this.errors.push('Falta el campo titulo !')
+                    }
+
+                    if (this.short_description === ''){
+                        this.errors.push('Falta el campo descripción corta !')
+                    }
+
+                    if (this.company_name === ''){
+                        this.errors.push('Falta el campo nombre de la compañía !')
+                    }
+
+                    if (this.company_size === ''){
+                        this.errors.push('Falta el campo tamaño de la compañía !')
+                    }
+
+                    if (this.errors.length){
+                        e.preventDefault()
+                        return false
+                    }else {
+                        return true
+                    }
+
+                }
+            }
+        }
+        Vue.createApp(AddJobApp).mount('#add-job-app');
+
+    </script>
+
+{% endblock scripts %}

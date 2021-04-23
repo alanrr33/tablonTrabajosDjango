@@ -1,0 +1,32 @@
+{% extends 'core/base.html' %}
+
+{% block content %}
+    <h1 class="title"> {{ job.title }} ({{ job.get_status_display }}) </h1>
+    <h2 class="subtitle">Publicado por: {{ job.created_by }} </h2>
+    <p class="is-size-4">{{ job.short_description }}</p>
+    <p>{{ job.long_description }}</p>
+
+    <b>Nombre de la compañía: </b> {{ job.company_name }}<br>
+    {% if job.company_address %}<b>Dirección de la compañía: </b> {{ job.company_address }}<br>{% endif %}
+    {% if job.company_zipcode %}<b>CP de la compañía: </b> {{ job.company_zipcode }}<br>{% endif %}
+    {% if job.company_place %}<b>Lugar de la compañía: </b> {{ job.company_place }}<br>{% endif %}
+    {% if job.company_country %}<b>País de la compañía: </b> {{ job.company_country }}<br>{% endif %}
+    <b>Tamaño de la compañía: </b> {{ job.get_company_size_display }}<br>
+
+    {% if job.status == 'active' %}
+
+        {% if user.username|slugify != job.created_by|slugify %}
+        <a href="{% url 'apply_for_job' job.id %}" class="button is-success">Aplicar</a>
+        {% else %}
+        <div class="notification is-warning">
+            <strong>Este es tu trabajo y no podes aplicar</strong>
+        </div>
+        {% endif %}
+
+    {% else %}
+    <p>Este trabajo ya no se encuentra disponible</p>
+
+    {% endif %}
+
+
+{% endblock content %}
